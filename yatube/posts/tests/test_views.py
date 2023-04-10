@@ -318,9 +318,8 @@ class FollowViewsTest(TestCase):
         self.author = Client()
         self.author.force_login(FollowViewsTest.author)
 
-    def test_authorized_user_can_follow_and_unfollow(self):
-        """Авторизованный пользователь может
-         подписаться и отписаться от автора поста"""
+    def test_authorized_user_can_follow(self):
+        """Авторизованный пользователь может подписаться """
         self.follower.get(reverse(
             'posts:profile_follow',
             kwargs={'username': FollowViewsTest.author}
@@ -329,6 +328,9 @@ class FollowViewsTest(TestCase):
             user=FollowViewsTest.follower,
             author=FollowViewsTest.author
         ).exists())
+
+    def test_authorized_user_can_unfollow(self):
+        """Авторизованный пользователь может отписаться от автора поста"""
         self.follower.get(reverse(
             'posts:profile_unfollow',
             kwargs={'username': FollowViewsTest.author}
@@ -336,7 +338,7 @@ class FollowViewsTest(TestCase):
         self.assertFalse(Follow.objects.filter(
             user=FollowViewsTest.follower,
             author=FollowViewsTest.author
-        ))
+        ).exists())
 
     def test_new_post_on_follower_and_unfollower_page(self):
         """
